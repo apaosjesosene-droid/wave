@@ -180,7 +180,7 @@ async function go(q){
   try{
     await boot();
     if(S.vpn){await ping(wispUrl());await connect()}
-  }catch{return toast(S.vpn?"VPN kill switch: exit node unreachable, browsing blocked.":"Proxy could not start. Use HTTPS or localhost, then reload.")}
+    }catch(e){console.error(e);return toast("Could not start: "+((e&&e.message)||"exit node connection failed"))}
   $("#view").classList.add("show");
   if(!frame){frame=sj.createFrame();$("#fw").append(frame.frame)}
   last=u.href;$("#addr").value=last;frame.go(last);
