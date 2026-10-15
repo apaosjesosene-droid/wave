@@ -1,8 +1,8 @@
 import { cpSync } from "node:fs";
-import { scramjetPath } from "@mercuryworkshop/scramjet/path";
-import { baremuxPath } from "@mercuryworkshop/bare-mux/node";
-import { epoxyPath } from "@mercuryworkshop/epoxy-transport";
+import { fileURLToPath } from "node:url";
 
-cpSync(scramjetPath, "public/scram", { recursive: true });
-cpSync(baremuxPath, "public/baremux", { recursive: true });
-cpSync(epoxyPath, "public/epoxy", { recursive: true });
+const nm = (p) => fileURLToPath(new URL("./node_modules/" + p, import.meta.url));
+
+cpSync(nm("@mercuryworkshop/scramjet/dist"), "public/scram", { recursive: true });
+cpSync(nm("@mercuryworkshop/bare-mux/dist"), "public/baremux", { recursive: true });
+cpSync(nm("@mercuryworkshop/epoxy-transport/dist"), "public/epoxy", { recursive: true });
