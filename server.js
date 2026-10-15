@@ -1,10 +1,10 @@
 import express from "express";
 import { createServer } from "node:http";
 import { fileURLToPath } from "node:url";
-import { scramjetPath } from "@mercuryworkshop/scramjet/path";
-import { baremuxPath } from "@mercuryworkshop/bare-mux/node";
-import { epoxyPath } from "@mercuryworkshop/epoxy-transport";
-import { server as wisp } from "@mercuryworkshop/wisp-js/server";
+import * as wispMod from "@mercuryworkshop/wisp-js/server";
+
+const wisp = wispMod.server ?? wispMod.default ?? wispMod;
+const nm = (p) => fileURLToPath(new URL("./node_modules/" + p, import.meta.url));
 
 const PORT = process.env.PORT || 8080;
 const app = express();
@@ -26,9 +26,9 @@ app.use((req, res, next) => {
   });
   next();
 });
-app.use("/scram", express.static(scramjetPath));
-app.use("/baremux", express.static(baremuxPath));
-app.use("/epoxy", express.static(epoxyPath));
+app.use("/scram", express.static(nm("@mercuryworkshop/scramjet/dist")));
+app.use("/baremux", express.static(nm("@mercuryworkshop/bare-mux/dist")));
+app.use("/epoxy", express.static(nm("@mercuryworkshop/epoxy-transport/dist")));
 app.use(express.static(fileURLToPath(new URL("./public", import.meta.url))));
 
 app.get("/api/config", (_, res) => res.json({ nodes }));
